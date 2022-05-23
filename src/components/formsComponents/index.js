@@ -20,7 +20,7 @@ const Input = styled.input`
   width: 300px;
   height: 50px;
   margin-top: 15px;
-  background: #ffffff;
+  background: ${(props) => (props.inputDisabled ? "red" : "#FFF")};
   border-radius: 8px;
   border: none;
   padding: 0 15px;

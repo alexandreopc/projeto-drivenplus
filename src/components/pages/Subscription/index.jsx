@@ -4,12 +4,23 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import UserContext from "../../../contexts/UserContext"
 
-import { Button, Container, Espaco, Form, Infos, Input } from "./style"
+import {
+  Button,
+  ButtonC,
+  ButtonD,
+  Caixa,
+  Container,
+  Espaco,
+  Form,
+  Infos,
+  Input,
+  PopUp,
+} from "./style"
 
 export default function Subscription() {
   const navigate = useNavigate()
   const params = useParams()
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const [formData, setFormData] = useState({
     nome: "",
     numCartao: "",
@@ -18,19 +29,23 @@ export default function Subscription() {
   })
   const [plano, setPlano] = useState([])
   const [perks, setPerks] = useState([])
+  const [modal, setModal] = useState(false)
+
+  const [popUp, setPopUp] = useState(false)
+  const x = localStorage.getItem("token")
 
   useEffect(() => {
-    if (Object.values(user).length === 0 || user.membership) {
-      navigate("/home")
-      return
-    }
+    // if (user.membership) {
+    //   navigate("/home")
+    //   return
+    // }
 
     axios
       .get(
         `${process.env.REACT_APP_API_BASE_URL}subscriptions/memberships/${params.id}`,
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${x}`,
           },
         }
       )
@@ -38,17 +53,19 @@ export default function Subscription() {
         setPlano(res.data)
         setPerks(res.data.perks)
       })
+      .catch((e) => console.log(e))
   }, [])
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
   function handleSubmit(e) {
+    e.preventDefault()
     axios
       .post(
         `${process.env.REACT_APP_API_BASE_URL}subscriptions`,
         {
-          membershipId: params,
+          membershipId: parseInt(params.id),
           cardName: formData.nome,
           cardNumber: formData.numCartao,
           securityNumber: formData.codSeg,
@@ -56,18 +73,36 @@ export default function Subscription() {
         },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${x}`,
           },
         }
       )
       .then((res) => {
-        console.log(res)
+        setUser({ ...user, id: params.id })
+        navigate("/home")
       })
-      .catch((e) => console.log(e))
+      .catch((e) => console.log("deu ruim", e))
   }
 
   return (
     <Container>
+      <PopUp modal={modal}>
+        <Caixa>
+          <span>
+            Tem certeza que deseja assinar o plano {plano.name} ({plano.price})?
+          </span>
+          <div>
+            <ButtonD
+              onClick={(e) => {
+                e.preventDefault()
+                setModal(false)
+              }}>
+              Não
+            </ButtonD>
+            <ButtonC onClick={handleSubmit}>SIM</ButtonC>
+          </div>
+        </Caixa>
+      </PopUp>
       <img src={plano.image} alt="logo do plano"></img>
       <h1>{plano.name}</h1>
 
@@ -87,7 +122,7 @@ export default function Subscription() {
         <p>R$ {plano.price} cobrados mensalmente</p>
       </Infos>
       <Espaco />
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Input
           type="text"
           placeholder="Nome impresso no cartão"
@@ -97,7 +132,7 @@ export default function Subscription() {
           required
         />
         <Input
-          type="number"
+          type="text"
           placeholder="Digitos do cartão"
           name="numCartao"
           value={formData.numCartao}
@@ -113,7 +148,7 @@ export default function Subscription() {
           required
         />
         <Input
-          type="number"
+          type="text"
           placeholder="Validade"
           name="validade"
           value={formData.validade}
@@ -121,7 +156,13 @@ export default function Subscription() {
           required
         />
 
-        <Button type="submit">ASSINAR</Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault()
+            setModal(true)
+          }}>
+          ASSINAR
+        </Button>
       </Form>
     </Container>
   )

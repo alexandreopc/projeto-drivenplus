@@ -11,13 +11,11 @@ export default function Subscriptions() {
   const params = useParams()
   const { user } = useContext(UserContext)
   const [planos, setPlanos] = useState([])
-
-  console.log(params)
   useEffect(() => {
-    if (Object.values(user).length === 0 || user.membership) {
-      navigate("/home")
-      return
-    }
+    // if (Object.values(user).length === 0 || user.membership) {
+    // navigate("/home")
+    // return
+    // }
 
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}subscriptions/memberships`, {
@@ -26,7 +24,6 @@ export default function Subscriptions() {
         },
       })
       .then((res) => {
-        console.log(res)
         setPlanos(res.data)
       })
       .catch((e) => console.log(e))

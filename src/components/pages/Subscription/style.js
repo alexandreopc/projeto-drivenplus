@@ -5,6 +5,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 
   width: 100vw;
   height: 100vh;
@@ -79,5 +80,68 @@ const Espaco = styled.div`
   width: 100%;
   height: 34px;
 `
+const PopUp = styled.div`
+  display: ${(props) => (props.modal ? "flex" : "none")};
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
 
-export { Button, Container, Espaco, Form, Infos, Input }
+  background: rgba(0, 0, 0, 0.7);
+`
+const Caixa = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 248px;
+  height: 210px;
+  padding: 33px 22px;
+
+  background: #ffffff;
+  border-radius: 12px;
+  border: none;
+
+  span {
+    margin-bottom: 50px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+
+    color: #000000;
+  }
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+`
+const ButtonC = styled.button`
+  width: 95px;
+  height: 52px;
+  background: #ff4791;
+  border-radius: 8px;
+  border: none;
+`
+const ButtonD = styled.button`
+  width: 95px;
+  height: 52px;
+  background: #cecece;
+  border-radius: 8px;
+  border: none;
+`
+
+export {
+  Button,
+  ButtonC,
+  ButtonD,
+  Caixa,
+  Container,
+  Espaco,
+  Form,
+  Infos,
+  Input,
+  PopUp,
+}
