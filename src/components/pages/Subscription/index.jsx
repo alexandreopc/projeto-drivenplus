@@ -35,11 +35,6 @@ export default function Subscription() {
   const x = localStorage.getItem("token")
 
   useEffect(() => {
-    // if (user.membership) {
-    //   navigate("/home")
-    //   return
-    // }
-
     axios
       .get(
         `${process.env.REACT_APP_API_BASE_URL}subscriptions/memberships/${params.id}`,

@@ -12,11 +12,6 @@ export default function Subscriptions() {
   const { user } = useContext(UserContext)
   const [planos, setPlanos] = useState([])
   useEffect(() => {
-    // if (Object.values(user).length === 0 || user.membership) {
-    // navigate("/home")
-    // return
-    // }
-
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}subscriptions/memberships`, {
         headers: {

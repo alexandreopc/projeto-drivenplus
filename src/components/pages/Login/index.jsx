@@ -14,7 +14,6 @@ export default function Login() {
     email: "",
     password: "",
   })
-  //criar estado para desabilitar (false)
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -53,8 +52,6 @@ export default function Login() {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          // inputDisabled={true}
-          // disabled={true} //passar estado
           required
         />
         <Input
